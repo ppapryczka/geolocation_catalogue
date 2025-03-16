@@ -1,3 +1,4 @@
+import logging
 from enum import Enum
 
 import requests
@@ -7,31 +8,16 @@ from stamina import retry
 
 from geolocation_catalogue.schemas import GeolocationSchema
 
+logging.basicConfig(level=logging.DEBUG)
+
 
 class IpStackHandlerErrorCode(Enum):
     NOT_FOUND: int = 404
 
 
-class IpStackHandler:
-    def __init__(self, api_access_key: str) -> None:
-        self._api_access_key = api_access_key
-
-    @retry(on=requests.HTTPError)
-    def resolve_geolocation(self, ip_address: str) -> None:
-        """
-        response = requests.get(
-            f"https://api.ipstack.com/{ip_address}",
-            params={
-                "access_key": self._api_access_key,
-                "fields": "main"
-            }
-        )
-
-        response.raise_for_status()
-        response_json = response.json()
-        """
+"""
         response_json = {
-            "ip": "216.58.209.4",
+            "ip": "216.58.209.14",
             "type": "ipv4",
             "continent_code": "NA",
             "continent_name": "North America",
@@ -49,6 +35,26 @@ class IpStackHandler:
             "ip_routing_type": "fixed",
             "connection_type": "ocx",
         }
+"""
+
+
+class IpStackHandler:
+    def __init__(self, api_access_key: str) -> None:
+        self._api_access_key = api_access_key
+
+    @retry(on=requests.HTTPError)
+    def resolve_geolocation(self, ip_address: str) -> None:
+        response = requests.get(
+            f"https://api.ipstack.com/{ip_address}",
+            params={"access_key": self._api_access_key, "fields": "main"},
+        )
+
+        response.raise_for_status()
+        response_json = response.json()
+
+        print("--------------")
+        print(response_json)
+        print("--------------")
 
         # if there is no success key it means success
         success = response_json.get("success", True)

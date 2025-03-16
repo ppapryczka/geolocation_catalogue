@@ -4,8 +4,6 @@ from pydantic import BaseModel, ConfigDict, StringConstraints
 
 
 class GeolocationSchema(BaseModel):
-    hostname: str | None = None
-    type: Literal["ipv4", "ipv6"]
     continent_code: Literal["AF", "AS", "EU", "NA", "OC", "SA", "AN"]
     continent_name: Literal[
         "Africa",
