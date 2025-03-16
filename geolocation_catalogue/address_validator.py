@@ -1,12 +1,14 @@
-from abc import ABC, abstractstaticmethod
 import ipaddress
-from socket import gethostbyname, gaierror
-from fastapi import HTTPException
 import re
+from abc import ABC, abstractstaticmethod
+from socket import gaierror, gethostbyname
+
+from fastapi import HTTPException
 
 DOMAIN_NAME_PATTERN: str = (
     r"^(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z0-9][a-z0-9-]{0,61}[a-z0-9]$"
 )
+# domain pattern taken from this answer: https://stackoverflow.com/a/30007882
 
 
 class AddressValidator(ABC):
@@ -57,9 +59,8 @@ class DomainNameValidator(AddressValidator):
             return gethostbyname(address)
         except gaierror:
             raise HTTPException(
-                status_code=404, detail=f"Error when trying to resolve domain IP."
+                status_code=404, detail="Error when trying to resolve domain IP."
             )
-        
 
 
 def validate_address(address: str) -> str:

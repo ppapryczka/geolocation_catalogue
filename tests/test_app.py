@@ -1,15 +1,17 @@
+from copy import deepcopy
+
 import pytest
 import responses
+from fastapi import Response, status
+
+from geolocation_catalogue.schemas import GeolocationSchema
+
 from .conftest import (
     IP_STACK_RESPONSES,
     TEST_IP_STACK_API_ACCESS_KEY,
-    insert_into_database,
     get_ip_geolocation_from_db,
+    insert_into_database,
 )
-from geolocation_catalogue.schemas import GeolocationSchema
-from fastapi import Response
-from copy import deepcopy
-from fastapi import status
 
 
 def check_response_against_data(response: Response, ip: str, data: dict) -> None:
@@ -115,3 +117,4 @@ def test_delete_address_geolocation_existing(test_app, ip, ip_stack_response):
     response = test_app.delete("/address", params={"address": ip})
 
     assert response.status_code == status.HTTP_204_NO_CONTENT
+    assert not get_ip_geolocation_from_db(ip)

@@ -9,5 +9,3 @@ class Config(BaseSettings):
 
 
 CONFIG: Config = Config()
-
-print(CONFIG)

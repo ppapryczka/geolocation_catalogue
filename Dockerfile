@@ -19,7 +19,7 @@ RUN poetry install --without=dev --no-root
 
 COPY geolocation_catalogue geolocation_catalogue
 COPY alembic alembic
-COPY alembic.ini . 
+COPY alembic.ini .
 
 COPY start.sh .
 RUN chmod +x start.sh

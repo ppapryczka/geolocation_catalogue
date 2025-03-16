@@ -1,13 +1,12 @@
 import pytest
-from geolocation_catalogue.config import CONFIG
-from geolocation_catalogue.main import get_db, app
 from fastapi.testclient import TestClient
+from sqlalchemy import create_engine, select
 from sqlalchemy.orm import Session, sessionmaker
-from sqlalchemy import create_engine
+
+from geolocation_catalogue.config import CONFIG
+from geolocation_catalogue.main import app, get_db
 from geolocation_catalogue.models import Base, IpGeolocation
 from geolocation_catalogue.schemas import GeolocationSchema
-from sqlalchemy import select
-
 
 IP_STACK_RESPONSES: dict[str, dict] = {
     "216.58.209.14": {
@@ -40,7 +39,7 @@ TEST_ENGINE = create_engine(str(CONFIG.pg_dsn))
 TEST_SESSION_MAKER = sessionmaker(autocommit=False, autoflush=False, bind=TEST_ENGINE)
 
 
-def override_get_db():
+def override_get_db() -> Session:
     try:
         db = TEST_SESSION_MAKER()
         yield db
@@ -49,7 +48,7 @@ def override_get_db():
 
 
 @pytest.fixture(autouse=True)
-def test_db():
+def test_db() -> None:
     Base.metadata.drop_all(bind=TEST_ENGINE)
     Base.metadata.create_all(bind=TEST_ENGINE)
 
