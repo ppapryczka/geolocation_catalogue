@@ -1,7 +1,8 @@
 from typing import Annotated
 
-from fastapi import Depends, FastAPI, HTTPException, Response
+from fastapi import Depends, FastAPI, HTTPException, Request, Response
 from pydantic import AfterValidator
+from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import Session
 
 from geolocation_catalogue.address_validator import validate_address
@@ -19,6 +20,18 @@ app = FastAPI(description=DESCRIPTION)
 @app.get("/")
 def root():
     return {"description": DESCRIPTION}
+
+
+@app.exception_handler(Exception)
+def exception_handler(request: Request, exc: Exception):
+    # TODO - we should send error to sentry
+
+    if isinstance(exc, SQLAlchemyError):
+        return Response(
+            status_code=500, content="Unknown database error during query execution."
+        )
+
+    raise Response(status_code=500, content="Unknown error during query execution.")
 
 
 @app.get("/address", response_model=IpGeolocationSchema)
