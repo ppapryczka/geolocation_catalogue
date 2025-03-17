@@ -1,0 +1,21 @@
+version: "3.9"
+
+services:
+  geolocation_catalogue:
+    image: geolocation_catalogue
+    ports:
+      - "8000:8000"
+    build:
+      dockerfile: Dockerfile
+      context: ./
+    environment:
+      - pg_dsn=postgresql://user:mysecretpassword@postgres:5432/postgres
+
+  postgres:
+    image: postgres
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=mysecretpassword
+      - POSTGRES_DB=postgres
