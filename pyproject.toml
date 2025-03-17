@@ -1,6 +1,6 @@
 [project]
 name = "geolocation-catalogue"
-version = "0.1.0"
+version = "1.0.0"
 description = ""
 authors = [
     {name = "Patryk Pankiewicz",email = "patryk.pankiewicz369@gmail.com"}
