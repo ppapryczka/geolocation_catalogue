@@ -16,7 +16,7 @@ curl -X 'PUT' \
    "zip":"00-025",
    "latitude":52.2317008972168,
    "longitude":21.018339157104492
-}' --silent --output
+}' --silent --output /dev/null
 
 echo "Putting google.com"
 curl -X 'PUT' \

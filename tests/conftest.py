@@ -27,7 +27,26 @@ IP_STACK_RESPONSES: dict[str, dict] = {
         "radius": "None",
         "ip_routing_type": "fixed",
         "connection_type": "ocx",
-    }
+    },
+    "57.144.110.1": {
+        "ip": "57.144.110.1",
+        "type": "ipv4",
+        "continent_code": "EU",
+        "continent_name": "Europe",
+        "country_code": "PL",
+        "country_name": "Poland",
+        "region_code": "MZ",
+        "region_name": "MZ",
+        "city": "Warsaw",
+        "zip": "00-025",
+        "latitude": 52.2317008972168,
+        "longitude": 21.018339157104492,
+        "msa": None,
+        "dma": None,
+        "radius": None,
+        "ip_routing_type": "fixed",
+        "connection_type": "tx",
+    },
 }
 
 TEST_IP_STACK_API_ACCESS_KEY: str = "test"

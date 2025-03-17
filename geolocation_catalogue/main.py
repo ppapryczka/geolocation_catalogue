@@ -23,7 +23,7 @@ def root():
 
 
 @app.exception_handler(Exception)
-def exception_handler(request: Request, exc: Exception):
+def exception_handler(request: Request, exc: Exception) -> None:
     # TODO - we should send error to sentry
 
     if isinstance(exc, SQLAlchemyError):

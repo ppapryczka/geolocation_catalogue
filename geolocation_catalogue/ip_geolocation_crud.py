@@ -10,7 +10,9 @@ from geolocation_catalogue.schemas import GeolocationSchema
 class IpGeolocationCRUD:
     @retry(on=SQLAlchemyError, attempts=5, timeout=3)
     @staticmethod
-    def create(db: Session, ip: str, geolocation_schema: GeolocationSchema):
+    def create(
+        db: Session, ip: str, geolocation_schema: GeolocationSchema
+    ) -> IpGeolocation:
         ip_geolocation = IpGeolocation(
             ip=ip, geolocation=geolocation_schema.model_dump()
         )

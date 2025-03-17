@@ -17,7 +17,7 @@ class IpStackHandler:
         self._api_access_key = api_access_key
 
     @retry(on=requests.HTTPError)
-    def resolve_geolocation(self, ip_address: str) -> None:
+    def resolve_geolocation(self, ip_address: str) -> GeolocationSchema:
         response = requests.get(
             f"https://api.ipstack.com/{ip_address}",
             params={"access_key": self._api_access_key, "fields": "main"},
@@ -36,7 +36,7 @@ class IpStackHandler:
         except ValidationError:
             raise HTTPException(
                 status_code=500,
-                detail="Internal error related to address's geolocation resolving process.",
+                detail="Internal error related to address geolocation resolving process.",
             )
 
         return schema
@@ -44,7 +44,7 @@ class IpStackHandler:
     def _handle_request_error(self, response_json: dict) -> None:
         unknown_error_exception = HTTPException(
             status_code=500,
-            detail="Unknown error during address's geolocation resolving process.",
+            detail="Unknown error during address geolocation resolving process.",
         )
 
         error_info = response_json.get("error", None)
@@ -53,14 +53,13 @@ class IpStackHandler:
         error_code = error_info.get("code", None)
         if not error_code:
             raise unknown_error_exception
-
         match error_code:
-            case IpStackHandlerErrorCode.NOT_FOUND:
+            case IpStackHandlerErrorCode.NOT_FOUND.value:
                 raise HTTPException(
                     status_code=404, detail="Geolocation info for address not found."
                 )
             case _:
                 raise HTTPException(
                     status_code=500,
-                    detail=f"Internal error related to address's geolocation resolving process - error code {error_code}",
+                    detail=f"Internal error related to address geolocation resolving process - error code {error_code}",
                 )

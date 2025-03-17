@@ -2,5 +2,4 @@
 !.gitignore
 !.gitlab-ci.yml
 !.pre-commit-config.yaml
-!.coveragerc
 __pycache__/
